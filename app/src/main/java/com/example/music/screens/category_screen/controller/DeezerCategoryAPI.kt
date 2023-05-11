@@ -6,18 +6,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-interface DeezerAPI {
+interface DeezerCategoryAPI {
     @GET("genre")
     suspend fun getGenres(): Response<GenresResponse>
 }
 
-object DeezerApiHelper {
+object DeezerCategoryApiHelper {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.deezer.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val api = retrofit.create(DeezerAPI::class.java)
+    private val api = retrofit.create(DeezerCategoryAPI::class.java)
 
     @Throws(RuntimeException::class)
     suspend fun fetchGenres(): GenresResponse {

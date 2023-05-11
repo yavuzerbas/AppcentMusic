@@ -23,7 +23,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.music.navigation.MyAppNavHost
 import com.example.music.navigation.Screen
+import com.example.music.screens.aritst_screen.view.ArtistsScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -76,30 +78,7 @@ class MainActivity : ComponentActivity() {
         handler.post(hideSystemBarsRunnable)
     }
 }
-@Composable
-fun MyAppNavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    startDestination: String = "logo_screen"
-) {
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable("logo_screen") {
-            // Navigate to CategoryScreen with myGenres as an argument
-            LogoScreen(navController = navController)
-        }
-        composable("category_screen/{args}") { backStackEntry ->
-            val myGenres = backStackEntry.arguments?.getString("args")
-            if (myGenres != null) {
-                CategoryScreen(navController,myGenres)
-            }
-        }
 
-    }
-}
 @Composable
 fun CustomNavigationBar(navController: NavController, items: List<Screen>) {
     BottomNavigation {

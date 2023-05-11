@@ -14,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
-import com.example.music.screens.category_screen.controller.DeezerApiHelper
-import com.example.music.screens.category_screen.model.GenresResponse
+import com.example.music.screens.category_screen.controller.DeezerCategoryApiHelper
 import com.google.gson.Gson
 
 @Composable
@@ -23,7 +22,7 @@ fun LogoScreen(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        val myGenres = DeezerApiHelper.fetchGenres()
+        val myGenres = DeezerCategoryApiHelper.fetchGenres()
 
         // Convert myGenres to a JSON string
         val gson = Gson()
