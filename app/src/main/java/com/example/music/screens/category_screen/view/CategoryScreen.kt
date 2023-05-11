@@ -9,8 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.music.TemplateScreen
 
 /*@Composable
 fun CategoryScreen(navController: NavController, string: String) {
@@ -46,14 +46,12 @@ fun CategoryScreen(navController: NavController, encodedJsonMyGenres: String) {
     val gson = Gson()
     val myGenres = gson.fromJson(jsonMyGenres, GenresResponse::class.java)
 
-    // Display the first genre name
-    if (myGenres != null) {
-        //Text(text = myGenres.data[0].name)
+    TemplateScreen(title = "Categories", content = {
         GenresList(genresResponse = myGenres)
-    }
+    }, contentIsEmpty = myGenres==null)
 }
 @Composable
-fun GenresList(genresResponse: GenresResponse) {
+fun GenresList(genresResponse: GenresResponse, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.padding(4.dp),
