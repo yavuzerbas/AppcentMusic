@@ -15,17 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
-import com.example.music.screens.category_screen.model.GenresResponse
-import com.example.music.screens.category_screen.view.CategoryScreen
-import com.example.music.screens.logo_screen.view.LogoScreen
 import com.example.music.ui.theme.MusicTheme
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.music.navigation.MyAppNavHost
 import com.example.music.navigation.Screen
-import com.example.music.screens.aritst_screen.view.ArtistsScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -69,6 +62,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    //SongPlayground()
                     MyAppNavHost()
                 }
             }
@@ -78,7 +72,6 @@ class MainActivity : ComponentActivity() {
         handler.post(hideSystemBarsRunnable)
     }
 }
-
 @Composable
 fun CustomNavigationBar(navController: NavController, items: List<Screen>) {
     BottomNavigation {
@@ -100,27 +93,3 @@ fun CustomNavigationBar(navController: NavController, items: List<Screen>) {
         }
     }
 }
-
-/*
-LogoScreen(
-    onNavigateToGenres = { navController.navigate("category_screen") },
-    /*...*/
-)
- */
-/*        composable("profile") {
-            ProfileScreen(
-                onNavigateToFriends = { navController.navigate("friendsList") },
-                *//*...*//*
-            )
-        }*/
-//composable("friendslist") { FriendsListScreen(/*...*/) }
-/*@Composable
-fun ProfileScreen(
-    onNavigateToFriends: () -> Unit,
-    *//*...*//*
-) {
-    *//*...*//*
-    Button(onClick = onNavigateToFriends) {
-        Text(text = "See friends list")
-    }
-}*/
