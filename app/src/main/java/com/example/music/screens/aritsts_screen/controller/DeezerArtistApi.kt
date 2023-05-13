@@ -1,8 +1,6 @@
-package com.example.music.screens.aritst_screen.controller
+package com.example.music.screens.aritsts_screen.controller
 
-import com.example.music.screens.aritst_screen.model.ArtistsResponse
-import com.example.music.screens.category_screen.controller.DeezerCategoryAPI
-import com.example.music.screens.category_screen.model.GenresResponse
+import com.example.music.screens.aritsts_screen.model.ArtistsResponse
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

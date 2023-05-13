@@ -6,7 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.music.screens.aritst_screen.view.ArtistsScreen
+import com.example.music.screens.aritsts_screen.view.ArtistsScreen
+import com.example.music.screens.artist_detail_screen.view.ArtistDetailScreen
 import com.example.music.screens.category_screen.view.CategoryScreen
 import com.example.music.screens.logo_screen.view.LogoScreen
 
@@ -32,11 +33,16 @@ fun MyAppNavHost(
             }
         }
         composable("artists_screen/{args}") { backStackEntry ->
-            val myArtists = backStackEntry.arguments?.getString("args")
-            if (myArtists != null) {
-                ArtistsScreen(navController,myArtists)
+            val genreId = backStackEntry.arguments?.getString("args")
+            if (genreId != null) {
+                ArtistsScreen(navController,genreId)
             }
         }
-
+        composable("artist_detail_screen/{args}") { backStackEntry ->
+            val artist = backStackEntry.arguments?.getString("args")
+            if (artist != null) {
+                ArtistDetailScreen(navController,artist)
+            }
+        }
     }
 }
