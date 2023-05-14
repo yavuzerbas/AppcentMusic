@@ -6,9 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.music.screens.aritsts_screen.view.ArtistsScreen
-import com.example.music.screens.artist_detail_screen.view.ArtistDetailScreen
-import com.example.music.screens.category_screen.view.CategoryScreen
+import com.example.music.screens.album_screen.ui.AlbumDetailsScreen
+import com.example.music.screens.aritsts_screen.ui.ArtistsScreen
+import com.example.music.screens.artist_detail_screen.ui.ArtistDetailScreen
+import com.example.music.screens.category_screen.ui.CategoryScreen
 import com.example.music.screens.logo_screen.view.LogoScreen
 
 @Composable
@@ -42,6 +43,12 @@ fun MyAppNavHost(
             val artist = backStackEntry.arguments?.getString("args")
             if (artist != null) {
                 ArtistDetailScreen(navController,artist)
+            }
+        }
+        composable("album_details_screen/{args}") { backStackEntry ->
+            val album = backStackEntry.arguments?.getString("args")
+            if (album != null) {
+                AlbumDetailsScreen(navController,album)
             }
         }
     }

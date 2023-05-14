@@ -7,7 +7,11 @@ data class AlbumDetailsResponse(
     val tracks: Tracks,
 
     @SerializedName("release_date")
-    val releaseDate: String
+    val releaseDate: String,
+
+    var albumName: String,
+
+    var albumPicture: String
 )
 
 data class Tracks(
@@ -15,7 +19,7 @@ data class Tracks(
     val data: List<TrackData>
 )
 
-data class TrackData(
+class TrackData(
     @SerializedName("id")
     val id: Int,
 
@@ -26,5 +30,17 @@ data class TrackData(
     val duration: Int,
 
     @SerializedName("preview")
-    val preview: String
-)
+    val preview: String,
+
+    var isLiked: Boolean = false
+){
+    fun getDurationInMinutes(): String{
+        val minutes = duration / 60
+        val seconds = duration % 60
+        return "$minutes:$seconds"
+    }
+    fun getTitleDeletingAfterEncounterParentheses(): String{
+        val index = title.indexOf("(")
+        return if(index == -1) title else title.substring(0, index)
+    }
+}

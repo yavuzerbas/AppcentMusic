@@ -1,4 +1,4 @@
-package com.example.music.screens.aritsts_screen.view
+package com.example.music.screens.aritsts_screen.ui
 
 import android.net.Uri
 import androidx.compose.foundation.layout.*
@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import com.example.music.ContentBox
 import com.example.music.LoadingScreen
 import com.example.music.TemplateScreen
-import com.example.music.screens.aritsts_screen.controller.DeezerArtistApiHelper
+import com.example.music.screens.aritsts_screen.data.DeezerArtistApiHelper
 import com.example.music.screens.aritsts_screen.model.Artist
 import com.example.music.screens.aritsts_screen.model.ArtistsResponse
 import com.google.gson.Gson

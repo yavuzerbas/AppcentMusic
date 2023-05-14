@@ -9,10 +9,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
-import com.example.music.screens.category_screen.controller.DeezerCategoryApiHelper
+import com.example.music.screens.category_screen.data.DeezerCategoryApiHelper
 import com.example.music.ui.theme.YTMusic
 import com.google.gson.Gson
 

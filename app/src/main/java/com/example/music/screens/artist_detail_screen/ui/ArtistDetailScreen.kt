@@ -1,4 +1,4 @@
-package com.example.music.screens.artist_detail_screen.view
+package com.example.music.screens.artist_detail_screen.ui
 
 import Album
 import AlbumsResponse
@@ -17,18 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.music.LoadingScreen
 import com.example.music.TemplateScreen
-import com.example.music.screens.album_screen.controller.DeezerAlbumDetailsApiHelper
 import com.example.music.screens.aritsts_screen.model.Artist
-import com.example.music.screens.artist_detail_screen.controller.DeezerAlbumApiHelper
 import com.example.music.ui.theme.YTMusicPurple
 import com.google.gson.Gson
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -39,74 +35,22 @@ fun ArtistDetailScreen(navController: NavController, encodedJsonArtist: String) 
     val gson = Gson()
     val artist = gson.fromJson(jsonArtist, Artist::class.java)
 
-    val albums = remember { mutableStateOf<AlbumsResponse?>(null) }
-    val isLoading = remember { mutableStateOf(true) }
+    val viewModel: ArtistDetailViewModel = viewModel() // Get ViewModel
 
     LaunchedEffect(key1 = artist.id) {
-        try {
-            isLoading.value = true
-            val fetchedAlbums = DeezerAlbumApiHelper.fetchAlbums(artist.id)
-            fetchedAlbums.removeDuplicates()
-            albums.value = fetchedAlbums
-            // Create a list to hold the Job objects returned by launch
-            val jobs = mutableListOf<Job>()
-
-            for (album in albums.value!!.data) {
-                // Start a new coroutine for each album
-                jobs += launch {
-                    val fetchedAlbumDetails = DeezerAlbumDetailsApiHelper.fetchAlbumDetails(album.album.id.toString())
-                    album.album.albumDetailsResponse = fetchedAlbumDetails
-                }
-            }
-            // Wait for all coroutines to complete
-            jobs.joinAll()
-
-        } catch (e: Exception) {
-            // handle error
-        } finally {
-            isLoading.value = false
-        }
+        viewModel.loadAlbums(artist.id) // Trigger data load when artist id changes
     }
-    if(isLoading.value){
+
+    if(viewModel.isLoading.value){
         LoadingScreen(artist.name)
     }
     else{
         TemplateScreen(title = artist.name, content = {
-            Column{
-                ArtistDetailScreenBody(navController,artist = artist,albums = albums.value!!)
-            }
-        }, contentIsEmpty = (albums.value == null) || (albums.value!!.data.isEmpty()) )
+            ArtistDetailScreenBody(navController,artist = artist,albums = viewModel.albums.value!!)
+        }, contentIsEmpty = (viewModel.albums.value == null) || (viewModel.albums.value!!.data.isEmpty()) )
     }
 }
-@Composable
-fun ArtistPicture(artist: Artist){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(160.dp)
-        .padding(bottom = 8.dp)){
-        AsyncImage(
-            model = artist.pictureBig,
-            contentDescription = "Artist Image",
-            contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxSize()
-                //.padding(end = 8.dp)
-                .align(Alignment.Center),
 
-            alpha = 0.5f
-        )
-        AsyncImage(
-            model = artist.pictureBig,
-            contentDescription = "Artist Image",
-            //contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
-            modifier = Modifier
-                //.fillMaxSize()
-                .padding(end = 8.dp)
-                .align(Alignment.Center)
-        )
-
-    }
-}
 @Composable
 fun ArtistDetailScreenBody(navController: NavController, artist: Artist, albums: AlbumsResponse) {
     val x = albums.data;
@@ -116,11 +60,12 @@ fun ArtistDetailScreenBody(navController: NavController, artist: Artist, albums:
         }
         items(x) { album ->
             AlbumCard(album = album.album, onclick = {
-                // Navigate to the album details screen
+                album.album.albumDetailsResponse!!.albumName = album.album.title
+                album.album.albumDetailsResponse!!.albumPicture = album.album.coverSmall
                 val gson = Gson()
-                val jsonAlbum = gson.toJson(album.album)
-                val encodedJsonAlbum = Uri.encode(jsonAlbum)
-                navController.navigate("album_details_screen/$encodedJsonAlbum")
+                val jsonAlbumDetails = gson.toJson(album.album.albumDetailsResponse)
+                val encodedJsonAlbumDetails = Uri.encode(jsonAlbumDetails)
+                navController.navigate("album_details_screen/$encodedJsonAlbumDetails")
             })
         }
     })
@@ -156,5 +101,33 @@ fun AlbumCard(album: Album, onclick : () -> Unit) {
                     Text(text = "", color = Color.White, modifier = Modifier.padding(start = 20.dp, top = 4.dp), fontStyle = androidx.compose.ui.text.font.FontStyle.Italic)
             }
         }
+    }
+}
+@Composable
+fun ArtistPicture(artist: Artist){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(160.dp)
+        .padding(bottom = 8.dp)){
+        AsyncImage(
+            model = artist.pictureBig,
+            contentDescription = "Artist Image",
+            contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxSize()
+                //.padding(end = 8.dp)
+                .align(Alignment.Center),
+
+            alpha = 0.5f
+        )
+        AsyncImage(
+            model = artist.pictureBig,
+            contentDescription = "Artist Image",
+            //contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
+            modifier = Modifier
+                //.fillMaxSize()
+                .padding(end = 8.dp)
+                .align(Alignment.Center)
+        )
     }
 }

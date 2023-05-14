@@ -1,8 +1,6 @@
-package com.example.music.screens.artist_detail_screen.controller
+package com.example.music.screens.artist_detail_screen.data
 
 import AlbumsResponse
-import com.example.music.screens.aritsts_screen.controller.DeezerArtistApi
-import com.example.music.screens.aritsts_screen.model.ArtistsResponse
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

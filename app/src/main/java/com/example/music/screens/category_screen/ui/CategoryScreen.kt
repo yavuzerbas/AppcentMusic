@@ -1,4 +1,4 @@
-package com.example.music.screens.category_screen.view
+package com.example.music.screens.category_screen.ui
 
 import android.net.Uri
 import androidx.compose.foundation.layout.*
