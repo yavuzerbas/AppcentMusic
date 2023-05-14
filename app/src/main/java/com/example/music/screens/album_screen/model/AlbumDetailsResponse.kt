@@ -2,9 +2,12 @@ package com.example.music.screens.album_screen.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SongsResponse(
+data class AlbumDetailsResponse(
     @SerializedName("tracks")
-    val tracks: Tracks
+    val tracks: Tracks,
+
+    @SerializedName("release_date")
+    val releaseDate: String
 )
 
 data class Tracks(

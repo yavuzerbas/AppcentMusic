@@ -1,3 +1,4 @@
+import com.example.music.screens.album_screen.model.AlbumDetailsResponse
 import com.google.gson.annotations.SerializedName
 
 class AlbumsResponse(
@@ -19,5 +20,6 @@ data class Album(
     @SerializedName("title") val title: String,
     @SerializedName("cover_big") val coverBig: String,
     @SerializedName("cover_medium") val coverMedium: String,
-    @SerializedName("cover_small") val coverSmall: String
+    @SerializedName("cover_small") val coverSmall: String,
+    var albumDetailsResponse: AlbumDetailsResponse?
 )

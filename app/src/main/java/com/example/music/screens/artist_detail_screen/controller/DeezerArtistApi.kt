@@ -11,7 +11,7 @@ import retrofit2.http.Path
 
 interface DeezerAlbumApi {
     @GET("artist/{artist_id}/top?limit=50")
-    suspend fun getAlbums(@Path("artist_id") genreId: String): Response<AlbumsResponse>
+    suspend fun getAlbums(@Path("artist_id") artistID: String): Response<AlbumsResponse>
 }
 object DeezerAlbumApiHelper {
     private val retrofit = Retrofit.Builder()
