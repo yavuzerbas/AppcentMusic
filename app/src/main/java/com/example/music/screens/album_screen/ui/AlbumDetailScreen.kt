@@ -1,5 +1,7 @@
 package com.example.music.screens.album_screen.ui
 
+import android.app.Application
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.music.MockImage
@@ -27,8 +31,8 @@ import com.example.music.TemplateScreen
 import com.example.music.screens.album_screen.model.TrackData
 
 @Composable
-fun AlbumDetailsScreen(navController: NavController, encodedJsonAlbum: String) {
-    val viewModel: AlbumDetailsViewModel = viewModel()  // Get a reference to your ViewModel
+fun AlbumDetailsScreen(navController: NavController, encodedJsonAlbum: String,application: Application){
+    val viewModel = ViewModelProvider(LocalContext.current as ComponentActivity, AlbumDetailsViewModelFactory(application)).get(AlbumDetailsViewModel::class.java)
     val albumDetailsResponse = viewModel.decodeAndDeserializeJson(encodedJsonAlbum)
 
     DisposableEffect(Unit) {

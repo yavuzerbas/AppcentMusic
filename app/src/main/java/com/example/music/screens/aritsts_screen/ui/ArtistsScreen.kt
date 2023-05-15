@@ -24,7 +24,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun ArtistsScreen(navController: NavController, genreId: String?,categoryName: String?) {
     val viewModel: ArtistsViewModel = viewModel() // Get a reference to your ViewModel
-
+    val categoryParsed: String
+    if(categoryName != null){
+        categoryParsed = categoryName.replace("_"," ").replace(",","/")
+    }
+    else{
+        categoryParsed = "Artists"
+    }
     if(genreId == null){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
             Text(text = "Genre ID is not found")
@@ -35,11 +41,11 @@ fun ArtistsScreen(navController: NavController, genreId: String?,categoryName: S
             viewModel.fetchArtists(genreId)
         }
         if(viewModel.isLoading){
-            LoadingScreen(categoryName?: "Artists")
+            LoadingScreen(categoryParsed)
         }
         else{
             TemplateScreen(
-                title = categoryName?: "Artists",
+                title = categoryParsed,
                 content = {
                     ArtistList(navController= navController, artists = viewModel.artists!!)
                 },

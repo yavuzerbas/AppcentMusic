@@ -1,5 +1,6 @@
 package com.example.music.navigation
 
+import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -16,7 +17,8 @@ import com.example.music.screens.logo_screen.view.LogoScreen
 fun MyAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = "logo_screen"
+    startDestination: String = "logo_screen",
+    application: Application
 ) {
     NavHost(
         modifier = modifier,
@@ -33,12 +35,12 @@ fun MyAppNavHost(
                 CategoryScreen(navController,myGenres)
             }
         }
-        composable("artists_screen/{args}") { backStackEntry ->
-            val args = backStackEntry.arguments?.getString("args")
-            val genreId = args?.split(",")?.get(0)
-            val categoryName = args?.split(",")?.get(1)
-            if (genreId != null) {
-                ArtistsScreen(navController,genreId,categoryName)
+        composable("artists_screen/{genreId}/{categoryName}") { backStackEntry ->
+            val genreId = backStackEntry.arguments?.getString("genreId")
+            val categoryName = backStackEntry.arguments?.getString("categoryName")
+
+            if (genreId != null && categoryName != null) {
+                ArtistsScreen(navController, genreId, categoryName)
             }
         }
         composable("artist_detail_screen/{args}") { backStackEntry ->
@@ -50,7 +52,7 @@ fun MyAppNavHost(
         composable("album_details_screen/{args}") { backStackEntry ->
             val album = backStackEntry.arguments?.getString("args")
             if (album != null) {
-                AlbumDetailsScreen(navController,album)
+                AlbumDetailsScreen(navController,album,application)
             }
         }
     }

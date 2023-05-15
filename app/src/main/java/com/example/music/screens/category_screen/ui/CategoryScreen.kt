@@ -39,7 +39,8 @@ fun GenresList( navController: NavController,genresResponse: GenresResponse, mod
     ) {
         items(genresResponse.data) { genre ->
             GenreBox(genre,onclick = {
-                navController.navigate("artists_screen/${genre.id},${genre.name}")
+                val parsedGenreName = genre.name.replace(" ","_").replace("/",",")
+                navController.navigate("artists_screen/${genre.id}/${parsedGenreName}")
             })
         }
     }
