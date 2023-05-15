@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.music.MockImage
 import com.example.music.TemplateScreen
@@ -49,12 +48,14 @@ fun AlbumDetailsScreen(navController: NavController, encodedJsonAlbum: String,ap
                 },
                 onLikeClick = {
                     track.isLiked = !track.isLiked
+                    viewModel.onLikeClick(track)
                 },
                 isPlaying = viewModel.currentPlayingTrack.value?.id == track.id,
                 viewModel = viewModel
             )
         }
-    }}, contentIsEmpty = albumDetailsResponse.tracks.data.isEmpty())
+    }}, contentIsEmpty = albumDetailsResponse.tracks.data.isEmpty(),
+        navController = navController)
 }
 @Composable
 fun TrackCard(image: String, track: TrackData, onclick: () -> Unit, onLikeClick: () -> Unit,isPlaying: Boolean,viewModel: AlbumDetailsViewModel){

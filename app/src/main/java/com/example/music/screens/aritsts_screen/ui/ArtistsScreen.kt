@@ -41,7 +41,7 @@ fun ArtistsScreen(navController: NavController, genreId: String?,categoryName: S
             viewModel.fetchArtists(genreId)
         }
         if(viewModel.isLoading){
-            LoadingScreen(categoryParsed)
+            LoadingScreen(navController=navController,categoryParsed)
         }
         else{
             TemplateScreen(
@@ -49,7 +49,8 @@ fun ArtistsScreen(navController: NavController, genreId: String?,categoryName: S
                 content = {
                     ArtistList(navController= navController, artists = viewModel.artists!!)
                 },
-                contentIsEmpty = viewModel.artists == null
+                contentIsEmpty = viewModel.artists == null,
+                navController = navController
             )
         }
     }

@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MyAppNavHost(application = this@MainActivity.application)
+                    MyAppNavHost(application = this@MainActivity.application as MusicApplication)
                 }
             }
         }

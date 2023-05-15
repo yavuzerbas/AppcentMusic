@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.music.FavoriteScreen
+import com.example.music.MusicApplication
 import com.example.music.screens.album_screen.ui.AlbumDetailsScreen
 import com.example.music.screens.aritsts_screen.ui.ArtistsScreen
 import com.example.music.screens.artist_detail_screen.ui.ArtistDetailScreen
@@ -18,7 +20,7 @@ fun MyAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = "logo_screen",
-    application: Application
+    application: MusicApplication
 ) {
     NavHost(
         modifier = modifier,
@@ -55,5 +57,11 @@ fun MyAppNavHost(
                 AlbumDetailsScreen(navController,album,application)
             }
         }
+        composable("favorites_screen") {
+            // Navigate to CategoryScreen with myGenres as an argument
+            FavoriteScreen(navController = navController,application = application)
+        }
     }
 }
+
+

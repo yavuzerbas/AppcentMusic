@@ -30,7 +30,7 @@ import com.example.music.ui.theme.colorIndex
 import com.example.music.ui.theme.colorList
 
 @Composable
-fun TemplateScreen(title: String, content: @Composable () -> Unit,contentIsEmpty: Boolean){
+fun TemplateScreen(navController:NavController, title: String, content: @Composable () -> Unit,contentIsEmpty: Boolean){
 
     Scaffold(
         topBar = {
@@ -77,7 +77,7 @@ fun TemplateScreen(title: String, content: @Composable () -> Unit,contentIsEmpty
                 BottomNavigationItem(
                     icon = { Icon(Icons.Default.Favorite, contentDescription = null) },
                     selected = false,
-                    onClick = {}
+                    onClick = {navController.navigate("favorites_screen")}
                 )
             }
         }
@@ -131,12 +131,13 @@ fun CustomNavigationBar(navController: NavController, items: List<Screen>) {
     }
 }
 @Composable
-fun LoadingScreen(title: String){
+fun LoadingScreen(navController: NavController,title: String){
     TemplateScreen(title = title, content = {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
-    }, contentIsEmpty = false)
+    }, contentIsEmpty = false,
+     navController = navController)
 }
 @Composable
 fun MockImage(image: String,text: String) {

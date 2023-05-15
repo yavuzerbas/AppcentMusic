@@ -27,7 +27,7 @@ fun CategoryScreen(navController: NavController, encodedJsonMyGenres: String) {
         myGenres?.let {
             GenresList(navController = navController, genresResponse = it)
         }
-    }, contentIsEmpty = myGenres == null)
+    }, contentIsEmpty = myGenres == null, navController = navController)
 }
 
 @Composable

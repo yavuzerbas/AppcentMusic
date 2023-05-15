@@ -42,12 +42,12 @@ fun ArtistDetailScreen(navController: NavController, encodedJsonArtist: String) 
     }
 
     if(viewModel.isLoading.value){
-        LoadingScreen(artist.name)
+        LoadingScreen(navController=navController,artist.name)
     }
     else{
         TemplateScreen(title = artist.name, content = {
             ArtistDetailScreenBody(navController,artist = artist,albums = viewModel.albums.value!!)
-        }, contentIsEmpty = (viewModel.albums.value == null) || (viewModel.albums.value!!.data.isEmpty()) )
+        }, contentIsEmpty = (viewModel.albums.value == null) || (viewModel.albums.value!!.data.isEmpty()), navController = navController )
     }
 }
 
