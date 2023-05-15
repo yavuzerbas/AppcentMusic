@@ -34,9 +34,11 @@ fun MyAppNavHost(
             }
         }
         composable("artists_screen/{args}") { backStackEntry ->
-            val genreId = backStackEntry.arguments?.getString("args")
+            val args = backStackEntry.arguments?.getString("args")
+            val genreId = args?.split(",")?.get(0)
+            val categoryName = args?.split(",")?.get(1)
             if (genreId != null) {
-                ArtistsScreen(navController,genreId)
+                ArtistsScreen(navController,genreId,categoryName)
             }
         }
         composable("artist_detail_screen/{args}") { backStackEntry ->

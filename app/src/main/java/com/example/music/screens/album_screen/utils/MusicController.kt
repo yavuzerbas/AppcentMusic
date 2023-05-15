@@ -1,27 +1,34 @@
 package com.example.music.screens.album_screen.utils
 
 import android.media.MediaPlayer
+import androidx.compose.ui.graphics.Color
+import com.example.music.screens.album_screen.model.TrackData
 
 class MusicController {
     private var mediaPlayer: MediaPlayer? = null
-    private var currentTrack: String? = null
-    fun playTrack(url: String) {
-        if(mediaPlayer != null && mediaPlayer!!.isPlaying && currentTrack == url) {
+    var currentTrack: TrackData? = null
+    fun playTrack(track: TrackData,onSongComplete: () -> Unit) {
+        if(mediaPlayer != null && mediaPlayer!!.isPlaying && currentTrack == track) {
             mediaPlayer?.stop()
             mediaPlayer?.release()
             mediaPlayer = null
             currentTrack = null
+            //track.backgroundColor = Color.DarkGray
             return
         }
         // Stop and release the current media player, if it exists
         mediaPlayer?.stop()
         mediaPlayer?.release()
-        currentTrack = url
+        currentTrack = track
+        //track.backgroundColor = Color.Red
         // Create a new media player for the new track
         mediaPlayer = MediaPlayer().apply {
-            setDataSource(url)
+            setDataSource(track.preview)
             setOnPreparedListener { start() }
-            setOnCompletionListener { mediaPlayer = null }
+            setOnCompletionListener {
+                mediaPlayer = null
+                onSongComplete()
+            }
             prepareAsync()
         }
     }

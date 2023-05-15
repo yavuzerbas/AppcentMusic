@@ -1,5 +1,6 @@
 package com.example.music.screens.album_screen.model
 
+
 import com.google.gson.annotations.SerializedName
 
 data class AlbumDetailsResponse(
@@ -32,8 +33,9 @@ class TrackData(
     @SerializedName("preview")
     val preview: String,
 
-    var isLiked: Boolean = false
+    var isLiked: Boolean = false,
 ){
+    //var backgroundColor by  mutableStateOf(Color.DarkGray)
     fun getDurationInMinutes(): String{
         val minutes = duration / 60
         val seconds = duration % 60

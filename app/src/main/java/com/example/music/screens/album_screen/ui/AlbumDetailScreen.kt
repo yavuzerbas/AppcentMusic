@@ -1,7 +1,5 @@
 package com.example.music.screens.album_screen.ui
 
-import com.example.music.screens.album_screen.utils.MusicController
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,74 +19,55 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import com.example.music.MockImage
 import com.example.music.TemplateScreen
-import com.example.music.screens.album_screen.model.AlbumDetailsResponse
 import com.example.music.screens.album_screen.model.TrackData
-import com.google.gson.Gson
 
-val colorList = listOf(
-    Color(0xFFE57373), // Light Red
-    Color(0xFF81C784), // Light Green
-    Color(0xFF64B5F6), // Light Blue
-    Color(0xFFFFF176), // Light Yellow
-    Color(0xFF4DD0E1), // Light Cyan
-    Color(0xFFF48FB1), // Light Magenta
-    Color(0xFFE0E0E0), // Light Gray
-    Color(0xFFAED581), // Light Lime
-    Color(0xFF7986CB), // Light Indigo
-    Color(0xFFDCE775), // Lime Yellow
-)
-
-// Variable to keep track of the current color index
-var colorIndex = 0
 @Composable
 fun AlbumDetailsScreen(navController: NavController, encodedJsonAlbum: String) {
+    val viewModel: AlbumDetailsViewModel = viewModel()  // Get a reference to your ViewModel
+    val albumDetailsResponse = viewModel.decodeAndDeserializeJson(encodedJsonAlbum)
 
-    val musicController = MusicController()
-    // Decode the JSON string
-    val jsonAlbum = Uri.decode(encodedJsonAlbum)
-    // Deserialize the JSON string back to GenresResponse object
-    val gson = Gson()
-    val albumDetailsResponse = gson.fromJson(jsonAlbum, AlbumDetailsResponse::class.java)
-    // This will stop the track when the screen is left
     DisposableEffect(Unit) {
         onDispose {
-            musicController.stopTrack()
+            viewModel.stopTrack()
         }
     }
     TemplateScreen(title = albumDetailsResponse.albumName, content = {LazyColumn {
         items(albumDetailsResponse.tracks.data) { track ->
-            TrackCard(albumDetailsResponse.albumPicture,track,musicController,
+            viewModel.backgroundColors.addColor(track.id)
+            TrackCard(albumDetailsResponse.albumPicture,track,
                 onclick = {
-                    // Play or stop the track when clicked
-                    musicController.playTrack(track.preview)
-            },
+                    viewModel.playTrack(track)
+                },
                 onLikeClick = {
                     track.isLiked = !track.isLiked
-                })
+                },
+                isPlaying = viewModel.currentPlayingTrack.value?.id == track.id,
+                viewModel = viewModel
+            )
         }
-    }},contentIsEmpty = albumDetailsResponse.tracks.data.isEmpty())
-
+    }}, contentIsEmpty = albumDetailsResponse.tracks.data.isEmpty())
 }
-
 @Composable
-fun TrackCard(image: String, track: TrackData, musicController: MusicController, onclick: () -> Unit, onLikeClick: () -> Unit){
+fun TrackCard(image: String, track: TrackData, onclick: () -> Unit, onLikeClick: () -> Unit,isPlaying: Boolean,viewModel: AlbumDetailsViewModel){
     var isLiked by remember { mutableStateOf(track.isLiked) } // state to keep track of whether the track is liked or not
-
+    //var backgroundColor by remember{ mutableStateOf(Color.DarkGray) }
+    //val backgroundColor = if (isPlaying) Color.Red else Color.DarkGray
+    val trackColor = viewModel.backgroundColors.getColor(track.id)
     Box(
         modifier = Modifier
             .padding(8.dp)
-            .background(Color.DarkGray)
+            .background(trackColor)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp)) // For curvy edges
             .border(1.dp, Color.White, RoundedCornerShape(8.dp))
             .clickable {
                 onclick()
+                //backgroundColor = Color.Red
             }// For white border
         //elevation = 8.dp
     ) {
@@ -112,42 +91,5 @@ fun TrackCard(image: String, track: TrackData, musicController: MusicController,
                 )
             }
         }
-    }
-}
-
-
-@Composable
-fun MockImage(image: String,text: String) {
-    // Get the current color from the list
-    val currentColor = colorList[colorIndex]
-
-    // Increment the index for the next call
-    colorIndex = (colorIndex + 1) % colorList.size
-    Box(
-        modifier = Modifier
-            .size(60.dp)
-            .fillMaxHeight()
-            .background(
-                color = currentColor
-            ) // range 0.0 to 0.5)
-        //elevation = 8.dp
-    ) {
-        AsyncImage(
-            model = image,
-            contentDescription = "Artist Image",
-            contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxSize()
-                //.padding(end = 8.dp)
-                .align(Alignment.Center),
-
-            alpha = 0.5f
-        )
-        Text(text = text,
-            modifier = Modifier.padding(1.dp).align(Alignment.Center),
-            color = Color.Black,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.Bold,
-            fontSize = 10.sp)
     }
 }

@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -17,15 +15,16 @@ import androidx.navigation.NavController
 import com.example.music.ContentBox
 import com.example.music.LoadingScreen
 import com.example.music.TemplateScreen
-import com.example.music.screens.aritsts_screen.data.DeezerArtistApiHelper
 import com.example.music.screens.aritsts_screen.model.Artist
 import com.example.music.screens.aritsts_screen.model.ArtistsResponse
 import com.google.gson.Gson
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 @Composable
-fun ArtistsScreen(navController: NavController, genreId: String?) {
-    val artists = remember { mutableStateOf<ArtistsResponse?>(null) }
-    val isLoading = remember { mutableStateOf(true) }
+fun ArtistsScreen(navController: NavController, genreId: String?,categoryName: String?) {
+    val viewModel: ArtistsViewModel = viewModel() // Get a reference to your ViewModel
+
     if(genreId == null){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
             Text(text = "Genre ID is not found")
@@ -33,22 +32,19 @@ fun ArtistsScreen(navController: NavController, genreId: String?) {
     }
     else{
         LaunchedEffect(key1 = genreId) {
-            try {
-                isLoading.value = true
-                artists.value = DeezerArtistApiHelper.fetchArtists(genreId)
-            } catch (e: Exception) {
-                // handle error
-            } finally {
-                isLoading.value = false
-            }
+            viewModel.fetchArtists(genreId)
         }
-        if(isLoading.value){
-            LoadingScreen("Artists")
+        if(viewModel.isLoading){
+            LoadingScreen(categoryName?: "Artists")
         }
         else{
-            TemplateScreen(title = "Artists", content = {
-                ArtistList(navController= navController,artists = artists.value!!)
-            }, contentIsEmpty = artists.value == null)
+            TemplateScreen(
+                title = categoryName?: "Artists",
+                content = {
+                    ArtistList(navController= navController, artists = viewModel.artists!!)
+                },
+                contentIsEmpty = viewModel.artists == null
+            )
         }
     }
 }

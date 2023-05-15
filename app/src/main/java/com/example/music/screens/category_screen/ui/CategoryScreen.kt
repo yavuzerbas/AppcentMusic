@@ -12,21 +12,24 @@ import com.example.music.screens.category_screen.model.GenresResponse
 import com.google.gson.Gson
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.music.ContentBox
 import com.example.music.TemplateScreen
 
 @Composable
 fun CategoryScreen(navController: NavController, encodedJsonMyGenres: String) {
-    // Decode the JSON string
-    val jsonMyGenres = Uri.decode(encodedJsonMyGenres)
-    // Deserialize the JSON string back to GenresResponse object
-    val gson = Gson()
-    val myGenres = gson.fromJson(jsonMyGenres, GenresResponse::class.java)
+    val viewModel: CategoryScreenViewModel = viewModel()
+    viewModel.decodeAndDeserializeJson(encodedJsonMyGenres)
+
+    val myGenres = viewModel.myGenres.value
 
     TemplateScreen(title = "Categories", content = {
-        GenresList(navController = navController, genresResponse = myGenres)
-    }, contentIsEmpty = myGenres==null)
+        myGenres?.let {
+            GenresList(navController = navController, genresResponse = it)
+        }
+    }, contentIsEmpty = myGenres == null)
 }
+
 @Composable
 fun GenresList( navController: NavController,genresResponse: GenresResponse, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
@@ -36,7 +39,7 @@ fun GenresList( navController: NavController,genresResponse: GenresResponse, mod
     ) {
         items(genresResponse.data) { genre ->
             GenreBox(genre,onclick = {
-                navController.navigate("artists_screen/${genre.id}}")
+                navController.navigate("artists_screen/${genre.id},${genre.name}")
             })
         }
     }

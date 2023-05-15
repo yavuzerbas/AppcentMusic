@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class ArtistsResponse(
     @SerializedName("data")
-    val data: List<Artist>
+    val data: List<Artist>,
+
+    val categoryName: String
 )
 data class Artist(
     @SerializedName("id")

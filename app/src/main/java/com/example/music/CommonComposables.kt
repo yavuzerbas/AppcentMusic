@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
@@ -14,14 +13,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.example.music.navigation.Screen
 import com.example.music.ui.theme.YTMusic
 import com.example.music.ui.theme.YTMusicPurple
+import com.example.music.ui.theme.colorIndex
+import com.example.music.ui.theme.colorList
 
 @Composable
 fun TemplateScreen(title: String, content: @Composable () -> Unit,contentIsEmpty: Boolean){
@@ -58,7 +64,13 @@ fun TemplateScreen(title: String, content: @Composable () -> Unit,contentIsEmpty
                 contentColor = MaterialTheme.colors.onPrimary
             ) {
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) },
+                    icon = {
+                        Icon(
+                            painterResource(id = R.drawable.musical_note),
+                            contentDescription = null,
+                            modifier = Modifier.scale(0.4f)
+                        )
+                    },
                     selected = false,
                     onClick = {}
                 )
@@ -67,13 +79,8 @@ fun TemplateScreen(title: String, content: @Composable () -> Unit,contentIsEmpty
                     selected = false,
                     onClick = {}
                 )
-                BottomNavigationItem(
-                    icon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
-                    selected = false,
-                    onClick = {}
-                )
-            }}
-
+            }
+        }
     )
 }
 @Composable
@@ -130,4 +137,39 @@ fun LoadingScreen(title: String){
             CircularProgressIndicator()
         }
     }, contentIsEmpty = false)
+}
+@Composable
+fun MockImage(image: String,text: String) {
+    // Get the current color from the list
+    val currentColor = colorList[colorIndex]
+
+    // Increment the index for the next call
+    colorIndex = (colorIndex + 1) % colorList.size
+    Box(
+        modifier = Modifier
+            .size(60.dp)
+            .fillMaxHeight()
+            .background(
+                color = currentColor
+            ) // range 0.0 to 0.5)
+        //elevation = 8.dp
+    ) {
+        AsyncImage(
+            model = image,
+            contentDescription = "Artist Image",
+            contentScale = androidx.compose.ui.layout.ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxSize()
+                //.padding(end = 8.dp)
+                .align(Alignment.Center),
+
+            alpha = 0.5f
+        )
+        Text(text = text,
+            modifier = Modifier.padding(1.dp).align(Alignment.Center),
+            color = Color.Black,
+            fontStyle = FontStyle.Italic,
+            fontWeight = FontWeight.Bold,
+            fontSize = 10.sp)
+    }
 }
